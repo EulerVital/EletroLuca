@@ -1,0 +1,18 @@
+﻿@model IEnumerable<ENT.Perfil>
+
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<h1>Perfis</h1>
+
+<table class="table table-borderless table-responsive">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+        </tr>
+    }
+</table>
