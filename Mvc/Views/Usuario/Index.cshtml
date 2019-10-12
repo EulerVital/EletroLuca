@@ -47,13 +47,22 @@
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Editar</a>
                     </td>
                     <td align="center">
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bd-example-modal-sm" data-id="@item.Id"><i class="fas fa-trash-alt"></i> Excluir</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@Html.PartialAsync("~/Views/Util/ModalDeletar.cshtml", new ModalDeletar()
+{
+    UrlCallback = @"\Usuario", 
+    NomeTitulo = "Usuário",
+    UrlPost = @"Usuario\Delete",
+
+
+});;
 
 <script type="text/javascript">
     document.read(function () {

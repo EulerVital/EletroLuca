@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,12 +20,14 @@ namespace Mvc
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            _environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment _environment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -44,6 +47,11 @@ namespace Mvc
             .AddCookie(options =>
             {
                 options.LoginPath = "/Login";
+                options.AccessDeniedPath = "/Home/AcessoNegado";
+                //options.Cookie.HttpOnly = true;
+                //options.Cookie.SecurePolicy = _environment.IsDevelopment()
+                //    ? CookieSecurePolicy.None : CookieSecurePolicy.Always;
+                //    options.Cookie.SameSite = SameSiteMode.Lax;
             });
 
             //Para funcionar a autenticação (HttpContext.SignInAsync) usando o IISExpress
@@ -52,7 +60,8 @@ namespace Mvc
                 options.ForwardClientCertificate = true;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //Autenticação global
+            services.AddMvc(options => options.Filters.Add(new AuthorizeFilter())).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAuthorization(options =>
             {
@@ -64,6 +73,8 @@ namespace Mvc
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -78,7 +89,6 @@ namespace Mvc
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

@@ -96,6 +96,7 @@ namespace Mvc.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             try

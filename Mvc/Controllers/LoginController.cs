@@ -7,6 +7,7 @@ using DAO;
 using ENT;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using NEG.Interfaces;
 
 namespace Mvc.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : Controller
     {
         private readonly ILoginNEG loginNEG;
@@ -51,13 +53,13 @@ namespace Mvc.Controllers
                             new Claim("SysAdmin", user.Perfil.Nome)
                         };
 
-                        ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "SysAdmin");
+                        ClaimsIdentity userIdentity = new ClaimsIdentity(claims);
                         ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                         if (User.Identity.IsAuthenticated)
-                            return RedirectToAction("Home", "Index");
+                            return RedirectToAction("Index", "Home");
                         else
                             TempData["LoginUsuarioFalhou"] = "O login Falhou. Informe as credenciais corretas " + User.Identity.Name;
 

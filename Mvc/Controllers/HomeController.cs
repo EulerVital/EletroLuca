@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mvc.Models;
 
 namespace Mvc.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -33,6 +35,12 @@ namespace Mvc.Controllers
             await HttpContext.SignOutAsync();
             return LocalRedirect(returnUrl);
         }
+
+        public IActionResult AcessoNegado()
+        {
+            return View();
+        }
+
 
 
     }

@@ -1,0 +1,34 @@
+﻿@model ModalDeletar
+
+@if (Model != null && Model.ValidarCamposDeletar())
+{
+    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="modalDelete" aria-hidden="true" data-id="">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header" id="alertDelete" style="display:none;">
+                    <div class="alert alert-warning" role="alert" id="alertaDeleteEnviando" style="display:none;">
+                        Enviando...
+                    </div>
+                    <div class="alert alert-danger" role="alert" id="alertaDeleteFalha" style="display:none;">
+                        Falha ao excluir...
+                    </div>
+                    <div class="alert alert-success" role="alert" id="alertaDeleteSucesso" style="display:none;">
+                        Exclusão realizada com sucesso...
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <h4>Excluir <label id="nomeDelete"></label></h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Deseja realmente excluir ?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="modalDeletar('@Model.UrlPost', '@Model.Valor', '@Model.UrlCallback', '@Model.NomeTitulo')"><i class="fas fa-trash-alt"></i> Concfirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
